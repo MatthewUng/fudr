@@ -14,7 +14,7 @@ def index():
     if error:
         return render_template('index.html', error=error)
     else:
-        return render_template('nidex.html')
+        return render_template('index.html')
 
 @app.route("/create/", methods=['GET', 'POST'])
 def vote_create():
@@ -38,4 +38,7 @@ def join_redirect():
         return redirect(url_for('join_vote',value=num))
     else:
         return redirect(url_for('index', error="No input was detected!"))
-    return "help"
+
+@app.route("/groupview", methods=['GET'])
+def group_view():
+    return render_template('group_view.html')
