@@ -1,5 +1,6 @@
 env
 .idea
+*config.py
 *.*.swp
 *.pyc
 *.pyo
