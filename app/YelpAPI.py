@@ -3,6 +3,8 @@ import requests
 import json
 import pprint as pp
 import random
+from app import db
+from app.models import Restaurant
 
 API_HOST = "https://api.yelp.com/"
 SEARCH_PATH = "v3/businesses/search"
@@ -44,5 +46,18 @@ if __name__ == "__main__":
     client_secret="CZDD5V5ac7g03EvkGPgxZnd8oEr7vvFLoRrfgZRGxpUxPCsM36H7VKTU7aCO38Xx"
     bearer_token="ZM5XBi7OFr88G_zbGYq0xc_0-9HvZswHVriiGXceX6Swt4E2hJ4i15ayIJgdy57UYjQkJXl1K25x44RfBeJoAC3L1rILvw7iNdbDh_rrpB48w69sfrFoBsNQwaNeWXYx"
 
-    thing = getRestaurants(bearer_token)
-    pp.pprint(thing)
+    params = {"location": "Jet Propulsion Laboratory",
+          "term" : "restaurants",
+          "limit" : "50"
+              }
+    result = request(API_HOST, SEARCH_PATH, bearer_token, params)['businesses']
+    pp.pprint(result)
+    for restaurant in result:
+        new = Restaurant(restaurant['name'], restaurant['url'])
+        result = Restaurant.query.filter_by(name=restaurant['name']).first()
+        if not result:
+            db.session.add(new)
+    db.session.commit()
+
+    # thing = getRestaurants(bearer_token)
+    # pp.pprint(thing)

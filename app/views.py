@@ -1,4 +1,4 @@
-from app import app
+from app import app, db
 from flask import render_template, request, redirect, url_for
 import sqlite3
 import hashlib
@@ -23,11 +23,15 @@ def vote_create():
     print(request.method)
     return render_template('vote_create.html')
 
-@app.route("/join/<int:value>", methods=['GET', 'POST'])
-def join_vote(value):
+@app.route("/<group>", methods=['GET'])
+def join_vote(group):
     print("join_vote")
     print(request.method)
-    return render_template('join_vote.html', group_num=value)
+
+    result = db.query.filter_by(group=group).first()
+    print(result)
+    d = {}
+    return render_template('group_view.html', group_num=value)
 
 @app.route("/redirect/", methods=['POST'])
 def join_redirect():
