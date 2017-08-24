@@ -55,9 +55,12 @@ if __name__ == "__main__":
     for restaurant in result:
         new = Restaurant(restaurant['name'], restaurant['url'])
         result = Restaurant.query.filter_by(name=restaurant['name']).first()
+        print(result)
         if not result:
+            print("adding")
             db.session.add(new)
     db.session.commit()
+    print("done")
 
     # thing = getRestaurants(bearer_token)
     # pp.pprint(thing)

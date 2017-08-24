@@ -1,9 +1,9 @@
 {% extends "default.html" %}
 
 {% block content %}
-<form action="{{ url_for('group_view') }}" method="POST">
+<form action="{{ url_for('create_redirect') }}" method="POST">
     Name of group:
-    <input type="text" name="votename"><br>
+    <input type="text" name="group name"><br>
     <input type="submit">
 </form>
 {% endblock %}

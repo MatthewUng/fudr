@@ -1,5 +1,7 @@
 from app import app, db
+from app.models import Group, Restaurant
 from flask import render_template, request, redirect, url_for
+from sqlalchemy.sql.expression import func, select
 import sqlite3
 import hashlib
 
@@ -18,20 +20,48 @@ def index():
         return render_template('index.html')
 
 @app.route("/create/", methods=['GET', 'POST'])
-def vote_create():
-    print("in vote_create")
+def create_vote():
+    print("in create_vote")
     print(request.method)
-    return render_template('vote_create.html')
+    return render_template('create_vote.html')
 
 @app.route("/<group>", methods=['GET'])
-def join_vote(group):
-    print("join_vote")
+def view_group(group):
+    print("in view_group")
     print(request.method)
 
-    result = db.query.filter_by(group=group).first()
-    print(result)
-    d = {}
-    return render_template('group_view.html', group_num=value)
+    db_group = db.session.query(Group).filter_by(name=group).first()
+
+    print("found: {}".format(db_group.name))
+
+    return render_template('group_view.html', group=db_group)
+
+@app.route("/redirect/", methods=['POST'])
+def create_redirect():
+    print("in create_redirect")
+    print(request.method)
+    name = request.form['group name']
+    result = db.session.query(Group).filter_by(name=name).first()
+    db.session.close()
+    if result:
+        #group already exists
+        print("already exists!")
+        print(result)
+        return redirect(url_for('index'))
+    else:
+        restaurants = db.session.query(Restaurant).order_by(func.random()).limit(3).all()
+        data = []
+        for r in restaurants:
+            print(r, r.name, r.url)
+            d = {'name': r.name,
+                 'url': r.url}
+            data.append(d)
+        print(data)
+        g = Group(name, data[0], data[1], data[2])
+        db.session.add(g)
+        db.session.commit()
+        db.session.close()
+        return redirect(url_for('view_group', group=name))
 
 @app.route("/redirect/", methods=['POST'])
 def join_redirect():
