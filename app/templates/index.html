@@ -9,12 +9,12 @@
 
 
     <form action="{{ url_for('create_vote') }}" method="GET">
-    <button>Create New Vote</button>
+        <button>Create New Vote</button>
     </form>
 
     <p>Join an ongoing vote with a group key</p>
-    <form action="{{ url_for('join_redirect') }}" method="POST">
+    <form action="{{ url_for('join_redirect') }}" method="post">
         <input type="text" name="group name">
-        <button>Join vote!</button>
+        <input type="submit" value="Join now">
     </form>
 {% endblock %}

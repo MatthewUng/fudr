@@ -4,15 +4,20 @@ class Group(db.Model):
     __tablename__ = "groups"
 
     name = db.Column(db.String, primary_key=True)
+    url = db.Column(db.String)
     restaurants = db.relationship('Restaurant', backref='owner_group')
 
-    def __init__(self, name):
+    def __init__(self, name, url):
+        print('creating group')
         self.name = name
+        self.url = url
+        print(self.name, self.url)
 
 class Restaurant(db.Model):
     __tablename__ = "restaurants"
 
-    name = db.Column(db.String, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
     url = db.Column(db.String)
     image = db.Column(db.String)
     count = db.Column(db.Integer, default=0)

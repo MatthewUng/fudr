@@ -3,6 +3,7 @@ from app.models import Group, Restaurant
 from flask import render_template, request, redirect, url_for
 from sqlalchemy.sql.expression import func, select
 from .YelpAPI import getRestaurants
+from urllib.parse import quote_plus
 
 @app.route('/', methods=['GET'])
 def index():
@@ -20,12 +21,12 @@ def create_vote():
     print(request.method)
     return render_template('create_vote.html')
 
-@app.route("/<group>", methods=['GET'])
-def view_group(group):
+@app.route("/<group_url>", methods=['GET'])
+def view_group(group_url):
     print("in view_group")
     print(request.method)
 
-    db_group = db.session.query(Group).filter_by(name=group).first()
+    db_group = db.session.query(Group).filter_by(url=group_url).first()
 
     print("found: {}".format(db_group.name))
 
@@ -43,7 +44,8 @@ def create_redirect():
         print(result)
         return redirect(url_for('index'))
     else:
-        g = Group(name)
+        url_friendly = quote_plus(name.strip())
+        g = Group(name, url_friendly)
         restaurants = getRestaurants(app.config['BEARER_TOKEN'])
         for r in restaurants:
             new = Restaurant(r['name'], r['url'], r['image_url'])
@@ -52,16 +54,19 @@ def create_redirect():
         db.session.add(g)
         db.session.commit()
         db.session.close()
-        return redirect(url_for('view_group', group=name))
+        return redirect(url_for('view_group', group_url=url_friendly))
 
-@app.route("/redirect/", methods=['POST'])
+@app.route("/join_redirect/", methods=['POST'])
 def join_redirect():
-    print('in redirect')
+    print('in join_redirect')
     print(request.method)
     if request.form['group name']:
         key = request.form['group name']
-        num = temp[key]
-        return redirect(url_for('join_vote',value=num))
+        r = db.session.query(Group).filter_by(name=key).first()
+        if not r:
+            return redirect(url_for('index', error="Group not found!"))
+        print(r.url)
+        return redirect('/'+r.url)
     else:
         return redirect(url_for('index', error="No input was detected!"))
 
