@@ -2,8 +2,7 @@ from app import app, db
 from app.models import Group, Restaurant
 from flask import render_template, request, redirect, url_for
 from sqlalchemy.sql.expression import func, select
-import sqlite3
-import hashlib
+from .YelpAPI import getRestaurants
 
 
 temp = {"hello": 0,
@@ -42,22 +41,19 @@ def create_redirect():
     print(request.method)
     name = request.form['group name']
     result = db.session.query(Group).filter_by(name=name).first()
-    db.session.close()
+    # db.session.close()
     if result:
         #group already exists
         print("already exists!")
         print(result)
         return redirect(url_for('index'))
     else:
-        restaurants = db.session.query(Restaurant).order_by(func.random()).limit(3).all()
-        data = []
+        g = Group(name)
+        restaurants = getRestaurants(app.config['bearer_token'])
         for r in restaurants:
-            print(r, r.name, r.url)
-            d = {'name': r.name,
-                 'url': r.url}
-            data.append(d)
-        print(data)
-        g = Group(name, data[0], data[1], data[2])
+            new = Restaurant(r['name'], r['url'])
+            db.session.add(new)
+            g.restaurants.append(new)
         db.session.add(g)
         db.session.commit()
         db.session.close()

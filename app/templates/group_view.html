@@ -4,9 +4,8 @@
 {% block content %}
 
     <form>
-        <input type="radio" name="0" value="first">{{ group.place_1.name }}<br>
-        <input type="radio" name="0" value="second">{{ group.place_2.name }}<br>
-        <input type="radio" name="0" value="third">{{ group.place_3.name }}<br>
-        <input type="submit" name="submit" value="Vote!">
-    </form>
+        {% for r in group.restaurants %}
+            <input type="radio" name="0" value="{{ r.name }}"><a href="{{ r.url }}">{{ r.name }}</a><br>
+        {% endfor %}
+   </form>
 {% endblock %}
