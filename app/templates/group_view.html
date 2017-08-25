@@ -5,7 +5,9 @@
 
     <form>
         {% for r in group.restaurants %}
-            <input type="radio" name="0" value="{{ r.name }}"><a href="{{ r.url }}">{{ r.name }}</a><br>
+        <a href="{{ r.url }}"><img src="{{ r.image }}" alt="bamboozled again!" width="150" height="150"></a>
+            <input type="radio" name="0" value="{{ r.name }}">{{ r.name }}<br>
         {% endfor %}
+        <input type="submit" name="submit" value="submit" action = >
    </form>
 {% endblock %}

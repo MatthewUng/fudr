@@ -4,10 +4,6 @@ from flask import render_template, request, redirect, url_for
 from sqlalchemy.sql.expression import func, select
 from .YelpAPI import getRestaurants
 
-
-temp = {"hello": 0,
-        "world": 1}
-
 @app.route('/', methods=['GET'])
 def index():
     print("in index")
@@ -41,7 +37,6 @@ def create_redirect():
     print(request.method)
     name = request.form['group name']
     result = db.session.query(Group).filter_by(name=name).first()
-    # db.session.close()
     if result:
         #group already exists
         print("already exists!")
@@ -49,9 +44,9 @@ def create_redirect():
         return redirect(url_for('index'))
     else:
         g = Group(name)
-        restaurants = getRestaurants(app.config['bearer_token'])
+        restaurants = getRestaurants(app.config['BEARER_TOKEN'])
         for r in restaurants:
-            new = Restaurant(r['name'], r['url'])
+            new = Restaurant(r['name'], r['url'], r['image_url'])
             db.session.add(new)
             g.restaurants.append(new)
         db.session.add(g)

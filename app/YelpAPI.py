@@ -42,25 +42,10 @@ def getRestaurants(bearer_token, location = "Jet Propulsion Laboratory", num=5):
     return random.sample(result, num)
 
 if __name__ == "__main__":
-    client_id = "G2rkJY33LKtN-vZQajkBcg"
-    client_secret="CZDD5V5ac7g03EvkGPgxZnd8oEr7vvFLoRrfgZRGxpUxPCsM36H7VKTU7aCO38Xx"
+    # client_id = "G2rkJY33LKtN-vZQajkBcg"
+    # client_secret="CZDD5V5ac7g03EvkGPgxZnd8oEr7vvFLoRrfgZRGxpUxPCsM36H7VKTU7aCO38Xx"
     bearer_token="ZM5XBi7OFr88G_zbGYq0xc_0-9HvZswHVriiGXceX6Swt4E2hJ4i15ayIJgdy57UYjQkJXl1K25x44RfBeJoAC3L1rILvw7iNdbDh_rrpB48w69sfrFoBsNQwaNeWXYx"
 
-    params = {"location": "Jet Propulsion Laboratory",
-          "term" : "restaurants",
-          "limit" : "50"
-              }
-    result = request(API_HOST, SEARCH_PATH, bearer_token, params)['businesses']
-    pp.pprint(result)
-    for restaurant in result:
-        new = Restaurant(restaurant['name'], restaurant['url'])
-        result = Restaurant.query.filter_by(name=restaurant['name']).first()
-        print(result)
-        if not result:
-            print("adding")
-            db.session.add(new)
-    db.session.commit()
-    print("done")
-
-    # thing = getRestaurants(bearer_token)
-    # pp.pprint(thing)
+    things = getRestaurants(bearer_token, num=1)
+    pp.pprint(things)
+    print(things[0]['image_url'])
