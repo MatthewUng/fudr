@@ -42,9 +42,6 @@ def getRestaurants(bearer_token, location = "Jet Propulsion Laboratory", num=5):
     return random.sample(result, num)
 
 if __name__ == "__main__":
-    # client_id = "G2rkJY33LKtN-vZQajkBcg"
-    # client_secret="CZDD5V5ac7g03EvkGPgxZnd8oEr7vvFLoRrfgZRGxpUxPCsM36H7VKTU7aCO38Xx"
-    bearer_token="ZM5XBi7OFr88G_zbGYq0xc_0-9HvZswHVriiGXceX6Swt4E2hJ4i15ayIJgdy57UYjQkJXl1K25x44RfBeJoAC3L1rILvw7iNdbDh_rrpB48w69sfrFoBsNQwaNeWXYx"
 
     things = getRestaurants(bearer_token, num=1)
     pp.pprint(things)
