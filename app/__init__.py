@@ -1,3 +1,12 @@
 from flask import Flask
-app = Flask(__name__)
+from flask_sqlalchemy import SQLAlchemy
+
+app = Flask(__name__, instance_relative_config=True)
+app.config.from_pyfile('config.py')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tmp/groups.sqlite'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db = SQLAlchemy(app)
 from app import views
+from app import models
+

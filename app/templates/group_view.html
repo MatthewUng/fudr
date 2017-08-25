@@ -1,0 +1,11 @@
+{% extends "default.html" %}
+
+
+{% block content %}
+
+    <form>
+        {% for r in group.restaurants %}
+            <input type="radio" name="0" value="{{ r.name }}"><a href="{{ r.url }}">{{ r.name }}</a><br>
+        {% endfor %}
+   </form>
+{% endblock %}
