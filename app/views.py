@@ -46,7 +46,7 @@ def create_redirect():
         #group already exists
         print("already exists!")
         print(result)
-        return redirect(url_for('index'))
+        return redirect(url_for('index', error="group already exists!"))
     else:
         url_friendly = quote_plus(name.strip())
         g = Group(name, url_friendly)
@@ -64,7 +64,7 @@ def create_redirect():
 def join_redirect():
     print('in join_redirect')
     print(request.method)
-    if request.form['group name']:
+    if 'group name' in request.form:
         key = request.form['group name']
         r = db.session.query(Group).filter_by(name=key).first()
         if not r:
@@ -78,7 +78,7 @@ def join_redirect():
 def vote_redirect():
     print("in vote_redirect")
     print(request.method)
-    if request.form['vote']:
+    if 'vote' in request.form:
         r_name = request.form['vote']
         g_name = request.form['group']
         g = db.session.query(Group).filter_by(name=g_name).first()
