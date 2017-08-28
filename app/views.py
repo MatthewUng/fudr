@@ -4,6 +4,7 @@ from flask import render_template, request, redirect, url_for
 from sqlalchemy.sql.expression import func, select
 from .YelpAPI import getRestaurants
 from urllib.parse import quote_plus
+from .charts import create_chart
 
 @app.route('/', methods=['GET'])
 def index():
@@ -27,12 +28,15 @@ def view_group(group_url):
     print(request.method)
 
     db_group = db.session.query(Group).filter_by(url=group_url).first()
-
+    plot_script, plot_div = create_chart(db_group)
     print("found: {}".format(db_group.name))
 
-    return render_template('group_view.html', group=db_group)
+    return render_template('group_view.html',
+                           group=db_group,
+                           plot_div=plot_div,
+                           plot_script=plot_script)
 
-@app.route("/redirect/", methods=['POST'])
+@app.route("/create_redirect/", methods=['POST'])
 def create_redirect():
     print("in create_redirect")
     print(request.method)
@@ -70,6 +74,21 @@ def join_redirect():
     else:
         return redirect(url_for('index', error="No input was detected!"))
 
-@app.route("/groupview", methods=['GET'])
-def group_view():
-    return render_template('group_view.html')
+@app.route("/vote_redirect/", methods=['POST'])
+def vote_redirect():
+    print("in vote_redirect")
+    print(request.method)
+    if request.form['vote']:
+        r_name = request.form['vote']
+        g_name = request.form['group']
+        g = db.session.query(Group).filter_by(name=g_name).first()
+        r = db.session.query(Restaurant).filter_by(owner_group=g, name=r_name).first()
+        r.count += 1
+        db.session.commit()
+        return redirect(url_for('view_group', group_url=g.url))
+    else:
+        return redirect(url_for('index', error="no vote was detected"))
+
+# @app.route("/groupview", methods=['GET'])
+# def group_view():
+#     return render_template('group_view.html')

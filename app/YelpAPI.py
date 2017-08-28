@@ -3,6 +3,7 @@ import requests
 import json
 import pprint as pp
 import random
+from app import app
 from app import db
 from app.models import Restaurant
 
@@ -42,7 +43,7 @@ def getRestaurants(bearer_token, location = "Jet Propulsion Laboratory", num=5):
     return random.sample(result, num)
 
 if __name__ == "__main__":
-
+    bearer_token = app.config['BEARER_TOKEN']
     things = getRestaurants(bearer_token, num=1)
     pp.pprint(things)
     print(things[0]['image_url'])
