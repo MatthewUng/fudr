@@ -1,8 +1,6 @@
 from bokeh.charts import Donut
 from bokeh.embed import components
 import pandas as pd
-from app import db
-from app.models import Group, Restaurant
 
 def create_chart(group):
     names = []
@@ -11,8 +9,6 @@ def create_chart(group):
         if r.count > 0:
             names.append(r.name)
             counts.append(r.count)
-    print(names)
-    print(counts)
     if len(names) == 0:
         return "", ""
     data = pd.Series(counts, index=names)

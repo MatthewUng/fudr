@@ -89,6 +89,3 @@ def vote_redirect():
     else:
         return redirect(url_for('index', error="no vote was detected"))
 
-# @app.route("/groupview", methods=['GET'])
-# def group_view():
-#     return render_template('group_view.html')

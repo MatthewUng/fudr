@@ -3,6 +3,8 @@
 
 {% block content %}
 <h2>Welcome {{ group.name }}</h2>
+<div style="width: 100%;o">
+    <div style="float:left; width: 40%">
     <form action="{{ url_for('vote_redirect') }}" method="post">
         <input type="hidden" name="group" value="{{ group.name }}">
 
@@ -12,7 +14,11 @@
         {% endfor %}
 
         <input type="submit" name="submit" value="submit">
-   </form>
-{{ plot_script | safe }}
-{{ plot_div | safe }}
+    </form>
+    </div>
+    <div style="float:left; width=60%">
+        {{ plot_script | safe }}
+        {{ plot_div | safe }}
+    </div>
+</div>
 {% endblock %}
