@@ -28,13 +28,16 @@ def view_group(group_url):
     print(request.method)
 
     db_group = db.session.query(Group).filter_by(url=group_url).first()
+    voted = bool(request.cookies.get(db_group.name))
+
     plot_script, plot_div = create_chart(db_group)
     print("found: {}".format(db_group.name))
 
     return render_template('group_view.html',
                            group=db_group,
                            plot_div=plot_div,
-                           plot_script=plot_script)
+                           plot_script=plot_script,
+                           voted=voted)
 
 @app.route("/create_redirect/", methods=['POST'])
 def create_redirect():
@@ -70,7 +73,7 @@ def join_redirect():
         if not r:
             return redirect(url_for('index', error="Group not found!"))
         print(r.url)
-        return redirect('/'+r.url)
+        return redirect(url_for('view_group', group_url=r.url))
     else:
         return redirect(url_for('index', error="No input was detected!"))
 
@@ -85,7 +88,10 @@ def vote_redirect():
         r = db.session.query(Restaurant).filter_by(owner_group=g, name=r_name).first()
         r.count += 1
         db.session.commit()
-        return redirect(url_for('view_group', group_url=g.url))
+
+        resp = redirect(url_for('view_group', group_url=g.url))
+        resp.set_cookie(g.name, 'voted')
+        return resp
     else:
         return redirect(url_for('index', error="no vote was detected"))
 
