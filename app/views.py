@@ -1,5 +1,5 @@
-from app import app, db
-from app.models import Group, Restaurant
+from app import app
+from app.models import Group, Restaurant, db
 from flask import render_template, request, redirect, url_for
 from sqlalchemy.sql.expression import func, select
 from .YelpAPI import getRestaurants

@@ -1,4 +1,4 @@
-from app import db
+from app.models import db
 
 def main():
     db.create_all()

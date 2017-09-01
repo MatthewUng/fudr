@@ -1,4 +1,7 @@
-from . import db
+from app import app
+from flask_sqlalchemy import SQLAlchemy
+
+db = SQLAlchemy(app)
 
 class Group(db.Model):
     __tablename__ = "groups"

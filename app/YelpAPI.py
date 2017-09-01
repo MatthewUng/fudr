@@ -4,8 +4,7 @@ import json
 import pprint as pp
 import random
 from app import app
-from app import db
-from app.models import Restaurant
+from app.models import Restaurant, db
 
 API_HOST = "https://api.yelp.com/"
 SEARCH_PATH = "v3/businesses/search"
